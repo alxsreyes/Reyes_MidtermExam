@@ -1,0 +1,212 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="MidtermExamModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="Product_Id" />
+          </Key>
+          <Property Name="Product_Id" Type="int" Nullable="false" />
+          <Property Name="Product_Code" Type="int" Nullable="false" />
+          <Property Name="Product_Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Color" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="Size" Type="int" Nullable="false" />
+          <Property Name="Price" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Sales">
+          <Key>
+            <PropertyRef Name="Sale_Id" />
+          </Key>
+          <Property Name="Sale_Id" Type="int" Nullable="false" />
+          <Property Name="Transaction_Date" Type="date" Nullable="false" />
+          <Property Name="Customer_Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SalesDetail">
+          <Key>
+            <PropertyRef Name="SalesDetail_Id" />
+          </Key>
+          <Property Name="SalesDetail_Id" Type="int" Nullable="false" />
+          <Property Name="Sale_Id" Type="int" Nullable="false" />
+          <Property Name="Product_Id" Type="int" Nullable="false" />
+          <Property Name="Price" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_SalesDetail_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="SalesDetail" Type="Self.SalesDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Product_Id" />
+            </Principal>
+            <Dependent Role="SalesDetail">
+              <PropertyRef Name="Product_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SalesDetail_Sales">
+          <End Role="Sales" Type="Self.Sales" Multiplicity="1" />
+          <End Role="SalesDetail" Type="Self.SalesDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sales">
+              <PropertyRef Name="Sale_Id" />
+            </Principal>
+            <Dependent Role="SalesDetail">
+              <PropertyRef Name="Sale_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MidtermExamModelStoreContainer">
+          <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sales" EntityType="Self.Sales" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SalesDetail" EntityType="Self.SalesDetail" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_SalesDetail_Product" Association="Self.FK_SalesDetail_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="SalesDetail" EntitySet="SalesDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SalesDetail_Sales" Association="Self.FK_SalesDetail_Sales">
+            <End Role="Sales" EntitySet="Sales" />
+            <End Role="SalesDetail" EntitySet="SalesDetail" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MidtermExamModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="Product_Id" />
+          </Key>
+          <Property Name="Product_Id" Type="Int32" Nullable="false" />
+          <Property Name="Product_Code" Type="Int32" Nullable="false" />
+          <Property Name="Product_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Color" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Size" Type="Int32" Nullable="false" />
+          <Property Name="Price" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="SalesDetail" Relationship="MidtermExamModel.FK_SalesDetail_Product" FromRole="Product" ToRole="SalesDetail" />
+        </EntityType>
+        <EntityType Name="Sales">
+          <Key>
+            <PropertyRef Name="Sale_Id" />
+          </Key>
+          <Property Name="Sale_Id" Type="Int32" Nullable="false" />
+          <Property Name="Transaction_Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Customer_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="SalesDetail" Relationship="MidtermExamModel.FK_SalesDetail_Sales" FromRole="Sales" ToRole="SalesDetail" />
+        </EntityType>
+        <EntityContainer Name="MidtermExamEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Product" EntityType="Self.Product" />
+          <EntitySet Name="Sales" EntityType="Self.Sales" />
+          <EntitySet Name="SalesDetail" EntityType="MidtermExamModel.SalesDetail" />
+          <AssociationSet Name="FK_SalesDetail_Product" Association="MidtermExamModel.FK_SalesDetail_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="SalesDetail" EntitySet="SalesDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SalesDetail_Sales" Association="MidtermExamModel.FK_SalesDetail_Sales">
+            <End Role="Sales" EntitySet="Sales" />
+            <End Role="SalesDetail" EntitySet="SalesDetail" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="SalesDetail">
+          <Key>
+            <PropertyRef Name="SalesDetail_Id" />
+          </Key>
+          <Property Name="SalesDetail_Id" Type="Int32" Nullable="false" />
+          <Property Name="Sale_Id" Type="Int32" Nullable="false" />
+          <Property Name="Product_Id" Type="Int32" Nullable="false" />
+          <Property Name="Price" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Product" Relationship="MidtermExamModel.FK_SalesDetail_Product" FromRole="SalesDetail" ToRole="Product" />
+          <NavigationProperty Name="Sales" Relationship="MidtermExamModel.FK_SalesDetail_Sales" FromRole="SalesDetail" ToRole="Sales" />
+        </EntityType>
+        <Association Name="FK_SalesDetail_Product">
+          <End Type="MidtermExamModel.Product" Role="Product" Multiplicity="1" />
+          <End Type="MidtermExamModel.SalesDetail" Role="SalesDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Product_Id" />
+            </Principal>
+            <Dependent Role="SalesDetail">
+              <PropertyRef Name="Product_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SalesDetail_Sales">
+          <End Type="MidtermExamModel.Sales" Role="Sales" Multiplicity="1" />
+          <End Type="MidtermExamModel.SalesDetail" Role="SalesDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sales">
+              <PropertyRef Name="Sale_Id" />
+            </Principal>
+            <Dependent Role="SalesDetail">
+              <PropertyRef Name="Sale_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MidtermExamModelStoreContainer" CdmEntityContainer="MidtermExamEntities">
+          <EntitySetMapping Name="Product">
+            <EntityTypeMapping TypeName="MidtermExamModel.Product">
+              <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="Product_Id" ColumnName="Product_Id" />
+                <ScalarProperty Name="Product_Code" ColumnName="Product_Code" />
+                <ScalarProperty Name="Product_Name" ColumnName="Product_Name" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
+                <ScalarProperty Name="Size" ColumnName="Size" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sales">
+            <EntityTypeMapping TypeName="MidtermExamModel.Sales">
+              <MappingFragment StoreEntitySet="Sales">
+                <ScalarProperty Name="Sale_Id" ColumnName="Sale_Id" />
+                <ScalarProperty Name="Transaction_Date" ColumnName="Transaction_Date" />
+                <ScalarProperty Name="Customer_Name" ColumnName="Customer_Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SalesDetail">
+            <EntityTypeMapping TypeName="MidtermExamModel.SalesDetail">
+              <MappingFragment StoreEntitySet="SalesDetail">
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Product_Id" ColumnName="Product_Id" />
+                <ScalarProperty Name="Sale_Id" ColumnName="Sale_Id" />
+                <ScalarProperty Name="SalesDetail_Id" ColumnName="SalesDetail_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
